@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <cmath>
 #include <vector>
@@ -50,8 +52,8 @@ int main(int argc, char **argv) {
     max_samples = atoi(argv[1]);
   }
   if (max_samples <= 0) {
-    fprintf(stderr, "If you're going to provide a maximum output, make it positive! :)\n");
-    return 0;
+    cerr << "If you're going to provide a maximum output, make it positive! :)" << endl;
+    return 1;
   }
   // inputs!
   float vprog = 43.0; // ft/s
@@ -90,26 +92,26 @@ int main(int argc, char **argv) {
   int step = 1;
   float the_time = 0;
 
-  printf("%.4s %7s %.5s %.5s %.5s %6s %6s %6s\n",
-    "Step",
-    "Time",
-    "Input",
-    "F1sum",
-    "F2sum",
-    "Vel",
-    "Pos",
-    "Acc"
-  );
+  cout << setw(4) << "Step" << ' ';
+  cout << setw(6) << "Time" << ' ';
+  cout << setw(5) << "Input" << ' ';
+  cout << setw(5) << "F1Sum" << ' ';
+  cout << setw(5) << "F2Sum" << ' ';
+  cout << setw(6) << "Vel"   << ' ';
+  cout << setw(6) << "Pos"   << ' ';
+  cout << setw(6) << "Acc"   << endl;
+
   do {
-    printf("%.4d %3.3f     %d %2.3f %.3f %.4f %.4f %.4f\n",
-      step,
-      the_time,
-      input,
-      fl1_sum,
-      fl2_sum,
-      vel,
-      pos,
-      acc);
+    cout.setf( std::ios::fixed, std::ios::floatfield );
+    cout << setw(4) << step << ' ';
+    cout << setw(6) << setprecision(4) << the_time << ' ';
+    cout << setw(5) << input << ' ';
+    cout << setw(5) << setprecision(3) << fl1_sum << ' ';
+    cout << setw(5) << setprecision(3) << fl2_sum << ' ';
+    cout << setw(6) << setprecision(4) << vel << ' ';
+    cout << setw(6) << setprecision(4) << pos << ' ';
+    cout << setw(6) << setprecision(4) << acc << endl;
+    cout.unsetf( std::ios::floatfield );
 
     ++step;
     the_time += itp / 1000.0;
