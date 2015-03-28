@@ -44,22 +44,7 @@ void DumpVector(std::vector<T> v, ostream & out) {
 #endif
 }
 
-int main(int argc, char **argv) {
-  int max_samples = 30;
-  if (argc > 1) {
-    max_samples = atoi(argv[1]);
-  }
-  if (max_samples <= 0) {
-    cerr << "If you're going to provide a maximum output, make it positive! :)" << endl;
-    return 1;
-  }
-  // inputs!
-  float vprog = 43.0; // ft/s
-  float dist  = 35; // ft
-  float t1    = 200; // ms
-  float t2    = 100; // ms
-  float itp   = 45; // ms
-
+void RunSimulation(float vprog, float dist, float t1, float t2, float itp, int max_samples=30) {
   // derived!
   float t4    = dist / vprog * 1000.0; // time in ms to get to destination
   float n     = RoundUp(t4 / itp); // total number of inputs to the filter
@@ -145,5 +130,27 @@ int main(int argc, char **argv) {
     pos = (vel + oldvel)/2.0 * itp / 1000.0 + oldpos;
     acc = (vel - oldvel)/(itp / 1000);
   } while ((fl1_sum > 0 || fl2_sum > 0) && step < max_samples);
+
+}
+
+
+int main(int argc, char **argv) {
+  int max_samples = 30;
+  if (argc > 1) {
+    max_samples = atoi(argv[1]);
+  }
+  if (max_samples <= 0) {
+    cerr << "If you're going to provide a maximum output, make it positive! :)" << endl;
+    return 1;
+  }
+  // inputs!
+  float vprog = 43.0; // ft/s
+  float dist  = 35; // ft
+  float t1    = 200; // ms
+  float t2    = 100; // ms
+  float itp   = 45; // ms
+
+  RunSimulation(vprog, dist, t1, t2, itp, max_samples);
+
   return 0;
 }
