@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
 
     float oldvel = vel;
     float oldpos = pos;
-    vel = fl1_sum + fl2_sum / (1.0 + fl2) * vprog;
+    vel = ((fl1_sum + fl2_sum) / (1.0 + fl2)) * vprog;
     pos = (vel + oldvel)/2.0 * itp / 1000.0 + oldpos;
     acc = (vel - oldvel)/(itp / 1000);
   } while ((fl1_sum > 0 || fl2_sum > 0) && step < max_samples);
