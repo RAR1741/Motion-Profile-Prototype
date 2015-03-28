@@ -5,15 +5,15 @@
 
 using namespace std;
 
-#define DEBUG 0
+#define DEBUG 1
 
-#ifdef DEBUG
+#if DEBUG
 #define DPRINTF(...) do { fprintf( stderr, __VA_ARGS__); } while (false)
 #else
 #define DPRINTF(...) do { } while (false)
 #endif
 
-#define DEXPR(expr) ( DPRINTF("%s -> %g\n", #expr, (expr)) )
+#define DEXPR(expr) do { DPRINTF("%s -> %g\n", #expr, (expr)); } while (false)
 
 // class MotionProfileController {
 // public:
@@ -37,7 +37,11 @@ using namespace std;
 
 
 int RoundUp(float num) {
-  return (int)(num + 0.5);
+  float x = (num + .5);
+  DEXPR(num);
+  DEXPR(x);
+  DEXPR(static_cast<int>(ceil(x)));
+  return static_cast<int>(ceil(x));
 }
 
 int main(int argc, char **argv) {
@@ -50,9 +54,13 @@ int main(int argc, char **argv) {
 
   // derived!
   float t4    = dist / vprog * 1000.0; // time in ms to get to destination
+  DEXPR(t4);
   float n     = RoundUp(t4 / itp); // total number of inputs to the filter
+  DEXPR(n);
   int   fl1   = RoundUp(t1 / itp);
+  DEXPR(fl1);
   int   fl2   = RoundUp(t2 / itp);
+  DEXPR(fl2);
 
   vector<float> fl1_array(fl2);
   for (int i = 0; i < fl2; ++i) {
@@ -98,7 +106,7 @@ int main(int argc, char **argv) {
     ++step;
     the_time += itp / 1000.0;
 
-    input += (step < n + 2) ? 1 : 0;
+    input = (step < n + 2) ? 1 : 0;
     float fl1_add = (input == 1) ? (1.0 / fl1) : (-1.0 / fl1);
 
     // sum filter 1 and divide by number of steps in filter 1
