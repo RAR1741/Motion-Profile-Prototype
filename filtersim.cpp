@@ -45,6 +45,14 @@ int RoundUp(float num) {
 }
 
 int main(int argc, char **argv) {
+  int max_samples = 30;
+  if (argc > 1) {
+    max_samples = atoi(argv[1]);
+  }
+  if (max_samples <= 0) {
+    fprintf(stderr, "If you're going to provide a maximum output, make it positive! :)\n");
+    return 0;
+  }
   // inputs!
   float vprog = 43.0; // ft/s
   float dist  = 35; // ft
@@ -82,7 +90,7 @@ int main(int argc, char **argv) {
   int step = 1;
   float the_time = 0;
 
-  printf("%.4s %8s %.5s %.5s %.5s %6s %6s %6s\n",
+  printf("%.4s %7s %.5s %.5s %.5s %6s %6s %6s\n",
     "Step",
     "Time",
     "Input",
@@ -93,7 +101,7 @@ int main(int argc, char **argv) {
     "Acc"
   );
   do {
-    printf("%.4d %3.5f     %d %.3f %.3f %.4f %.4f %.4f\n",
+    printf("%.4d %3.3f     %d %2.3f %.3f %.4f %.4f %.4f\n",
       step,
       the_time,
       input,
@@ -126,6 +134,6 @@ int main(int argc, char **argv) {
     vel = fl1_sum + fl2_sum / (1.0 + fl2) * vprog;
     pos = (vel + oldvel)/2.0 * itp / 1000.0 + oldpos;
     acc = (vel - oldvel)/(itp / 1000);
-  } while ((fl1_sum > 0 || fl2_sum > 0) && step < 30);
+  } while ((fl1_sum > 0 || fl2_sum > 0) && step < max_samples);
   return 0;
 }
