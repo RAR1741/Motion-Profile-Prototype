@@ -6,17 +6,6 @@
 #include <vector>
 
 using namespace std;
-
-#define DEBUG 1
-
-#if DEBUG
-#define DPRINTF(...) do { fprintf( stderr, __VA_ARGS__); } while (false)
-#else
-#define DPRINTF(...) do { } while (false)
-#endif
-
-#define DEXPR(expr) do { DPRINTF("%s -> %g\n", #expr, (expr)); } while (false)
-
 // class MotionProfileController {
 // public:
 //   MotionProfileController();
@@ -37,13 +26,22 @@ using namespace std;
 //   int step;
 // }
 
+#define DEBUG 0
 
 int RoundUp(float num) {
-  float x = (num + .5);
-  DEXPR(num);
-  DEXPR(x);
-  DEXPR(static_cast<int>(ceil(x)));
-  return static_cast<int>(ceil(x));
+  float x = num;
+  return ceil(num);
+}
+
+template <typename T>
+void DumpVector(std::vector<T> v, ostream & out) {
+#if DEBUG
+  out << "[ ";
+  for (int i = 0; i < v.size(); ++i) {
+    out << v[i] << " ";
+  }
+  out << "]" << endl;
+#endif
 }
 
 int main(int argc, char **argv) {
@@ -64,15 +62,22 @@ int main(int argc, char **argv) {
 
   // derived!
   float t4    = dist / vprog * 1000.0; // time in ms to get to destination
-  DEXPR(t4);
   float n     = RoundUp(t4 / itp); // total number of inputs to the filter
-  DEXPR(n);
   int   fl1   = RoundUp(t1 / itp);
-  DEXPR(fl1);
   int   fl2   = RoundUp(t2 / itp);
-  DEXPR(fl2);
 
-  vector<float> fl1_array(fl2);
+  cout << "vprog = " << vprog << endl;
+  cout << "dist  = " << dist << endl;
+  cout << "t1    = " << t1 << endl;
+  cout << "t2    = " << t2 << endl;
+  cout << "itp   = " << itp << endl;
+  cout << endl;
+  cout << "t4  = " << t4 << endl;
+  cout << "n   = " << n << endl;
+  cout << "fl1 = " << fl1 << endl;
+  cout << "fl2 = " << fl2 << endl;
+
+  vector<float> fl1_array;
   for (int i = 0; i < fl2; ++i) {
     fl1_array.push_back(0);
   }
@@ -121,13 +126,16 @@ int main(int argc, char **argv) {
 
     // sum filter 1 and divide by number of steps in filter 1
     // as input to filter 2.
+
+    DumpVector(fl1_array, cout);
     fl1_sum = max(0.0f, min(1.0f, fl1_sum + fl1_add));
     fl1_array[fl1_array_idx++] = fl1_sum;
-    if (fl1_array_idx >= fl1) {
+    if (fl1_array_idx >= fl2) {
       fl1_array_idx = 0;
     }
 
-    for (int i = 0, fl2_sum = 0; i < fl1; ++i) {
+    fl2_sum = 0;
+    for (int i = 0; i < fl2; ++i) {
       fl2_sum += fl1_array[i];
     }
 
