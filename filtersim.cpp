@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
 
     // sum filter 1 and divide by number of steps in filter 1
     // as input to filter 2.
-    fl1_sum += max(0.0f, min(1.0f,fl1_add));
+    fl1_sum = max(0.0f, min(1.0f, fl1_sum + fl1_add));
     fl1_array[fl1_array_idx++] = fl1_sum;
     if (fl1_array_idx >= fl1) {
       fl1_array_idx = 0;
