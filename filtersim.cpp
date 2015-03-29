@@ -4,27 +4,9 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include "MotionProfileController.h"
 
 using namespace std;
-// class MotionProfileController {
-// public:
-//   MotionProfileController();
-//   ~MotionProfileController();
-//
-//   void SetupMotion(float max_speed,
-//                    float distance,
-//                    float t1,
-//                    float t2,
-//                    float itp,
-//                  );
-//
-// private:
-//   float t4;
-//   float fl1_sum;
-//   float fl2_sum;
-//   float N;
-//   int step;
-// }
 
 #define DEBUG 0
 
@@ -44,7 +26,42 @@ void DumpVector(std::vector<T> v, ostream & out) {
 #endif
 }
 
-void RunSimulation(float vprog, float dist, float t1, float t2, float itp, int max_samples=30) {
+void PrintProfile(MotionProfile & profile) {
+  cout << setw(4) << "Step" << ' ';
+  cout << setw(6) << "Time" << ' ';
+  cout << setw(6) << "Vel"   << ' ';
+  cout << setw(6) << "Pos"   << ' ';
+  cout << setw(6) << "Acc"   << endl;
+
+  for (int i = 0; i < profile.Steps(); ++i) {
+    MotionProfileStep step = profile[i];
+    cout.setf( std::ios::fixed, std::ios::floatfield );
+    cout << setw(4) << i+1 << ' ';
+    cout << setw(6) << setprecision(4) << step.Time() << ' ';
+    cout << setw(6) << setprecision(4) << step.Velocity() << ' ';
+    cout << setw(6) << setprecision(4) << step.Position() << ' ';
+    cout << setw(6) << setprecision(4) << step.Acceleration() << endl;
+    cout.unsetf( std::ios::floatfield );
+  }
+}
+
+void RunSimulation(float vprog, float dist, float t1, float t2, float itp, int max_samples = 60) {
+  MotionProfileController controller;
+  MotionProfile profile = controller.ComputeMotion(vprog, dist, t1, t2, itp);
+
+  cout << "vprog = " << vprog << endl;
+  cout << "dist  = " << dist << endl;
+  cout << "t1    = " << t1 << endl;
+  cout << "t2    = " << t2 << endl;
+  cout << "itp   = " << itp << endl;
+  cout << endl;
+
+  PrintProfile(profile);
+}
+
+
+
+void RunSimulationOld(float vprog, float dist, float t1, float t2, float itp, int max_samples=30) {
   // derived!
   float t4    = dist / vprog * 1000.0; // time in ms to get to destination
   float n     = RoundUp(t4 / itp); // total number of inputs to the filter
