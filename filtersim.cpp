@@ -153,6 +153,14 @@ void RunSimulationOld(float vprog, float dist, float t1, float t2, float itp, in
 
 int main(int argc, char **argv) {
   int max_samples = 30;
+
+  // inputs!
+  float vprog = 43.0; // ft/s
+  float dist  = 35; // ft
+  float t1    = 200; // ms
+  float t2    = 100; // ms
+  float itp   = 45; // ms
+
   if (argc > 1) {
     max_samples = atoi(argv[1]);
   }
@@ -160,12 +168,21 @@ int main(int argc, char **argv) {
     cerr << "If you're going to provide a maximum output, make it positive! :)" << endl;
     return 1;
   }
-  // inputs!
-  float vprog = 43.0; // ft/s
-  float dist  = 35; // ft
-  float t1    = 200; // ms
-  float t2    = 100; // ms
-  float itp   = 45; // ms
+  if (argc > 2) {
+    vprog = atof(argv[2]);
+  }
+  if (argc > 3) {
+    dist  = atof(argv[3]);
+  }
+  if (argc > 4) {
+    t1    = atof(argv[4]);
+  }
+  if (argc > 5) {
+    t2    = atof(argv[5]);
+  }
+  if (argc > 6) {
+    itp   = atof(argv[6]);
+  }
 
   RunSimulation(vprog, dist, t1, t2, itp, max_samples);
 
