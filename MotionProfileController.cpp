@@ -1,4 +1,5 @@
 #include "MotionProfileController.h"
+#include <iostream>
 #include <cmath>
 #include <algorithm>
 
@@ -74,7 +75,7 @@ MotionProfile MotionProfileController::ComputeMotion(
   float velocity = 0.0f;
   float acceleration = 0.0f;
 
-  int step = 0;
+  int step = 1;
   float the_time = 0.0f;
 
   std::vector<float> previous_fl1_sums;
@@ -93,6 +94,7 @@ MotionProfile MotionProfileController::ComputeMotion(
     profile.AppendStep(the_step);
 
     ++step;
+    the_time += itp;
 
     int input = (step < N + 2) ? 1 : 0; // Input to the filterz
 
