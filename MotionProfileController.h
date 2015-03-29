@@ -1,3 +1,12 @@
+/*
+MotionProfileController.h
+
+Set of related classes for doing motion profile planning
+and execution.
+
+P. Frampton, 2015
+*/
+
 #ifndef MOTION_PROFILE_H__
 #define MOTION_PROFILE_H__
 
